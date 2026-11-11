@@ -97,6 +97,11 @@
     ]
   },
   {
+    "id": "cliente",
+    "titulo": "Cliente",
+    "tareas": []
+  },
+  {
     "id": "web",
     "titulo": "Web",
     "tareas": []

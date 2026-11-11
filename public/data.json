@@ -1,0 +1,109 @@
+[
+  {
+    "id": "servidor",
+    "titulo": "Servidor",
+    "subsecciones": [
+      {
+        "id": "general",
+        "titulo": "General",
+        "tareas": [
+          {
+            "id": "srv-general-exp",
+            "titulo": "Experiencia",
+            "desc": "Normal: 10\nPlatinum: +20%"
+          },
+          {
+            "id": "srv-general-stats",
+            "titulo": "Max Stats",
+            "desc": "15.000"
+          },
+          {
+            "id": "srv-general-chars",
+            "titulo": "Creacion de personajes",
+            "desc": "MG: 220\nDL: 250\nRF: 300"
+          }
+        ]
+      },
+      {
+        "id": "drop",
+        "titulo": "Drop de items",
+        "tareas": []
+      },
+      {
+        "id": "bosses",
+        "titulo": "Bosses",
+        "tareas": []
+      },
+      {
+        "id": "eventos",
+        "titulo": "Eventos",
+        "tareas": []
+      },
+      {
+        "id": "itembags",
+        "titulo": "Itembags",
+        "tareas": []
+      },
+      {
+        "id": "skills",
+        "titulo": "Skills",
+        "tareas": []
+      },
+      {
+        "id": "chaos",
+        "titulo": "Maquina del chaos",
+        "tareas": []
+      },
+      {
+        "id": "xshop",
+        "titulo": "Xshop",
+        "tareas": []
+      },
+      {
+        "id": "balance",
+        "titulo": "Balance",
+        "tareas": []
+      },
+      {
+        "id": "npc",
+        "titulo": "Npc",
+        "tareas": []
+      },
+      {
+        "id": "spot",
+        "titulo": "Spot",
+        "tareas": []
+      },
+      {
+        "id": "reset",
+        "titulo": "Reset",
+        "tareas": []
+      },
+      {
+        "id": "master-reset",
+        "titulo": "Master Reset",
+        "tareas": []
+      },
+      {
+        "id": "helper",
+        "titulo": "Helper",
+        "tareas": []
+      },
+      {
+        "id": "offlevel",
+        "titulo": "Offlevel",
+        "tareas": []
+      }
+    ]
+  },
+  {
+    "id": "web",
+    "titulo": "Web",
+    "tareas": []
+  },
+  {
+    "id": "dedicado",
+    "titulo": "Dedicado",
+    "tareas": []
+  }
+]

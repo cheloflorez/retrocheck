@@ -1,0 +1,250 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #14110f;
+  color: #e8dfd0;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  padding: 24px 16px;
+  background: #1d1814;
+  border-right: 1px solid #3a2f22;
+}
+
+.logo {
+  margin: 0 0 8px;
+  color: #d4a94a;
+  font-size: 1.6rem;
+}
+.total {
+  margin: 0 0 24px;
+  font-size: 0.85rem;
+  color: #a89c88;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  color: #e8dfd0;
+  text-decoration: none;
+}
+.menu-item:hover {
+  background: #2a221a;
+}
+.menu-item.activo {
+  background: #3a2f22;
+  color: #d4a94a;
+}
+.menu-item small {
+  color: #a89c88;
+}
+
+.menu-item.padre::before {
+  content: "▸";
+  margin-right: 8px;
+  transition: transform 0.15s;
+}
+.menu-item.padre.abierto::before {
+  transform: rotate(90deg);
+}
+.menu-item.padre span {
+  flex: 1;
+}
+
+.submenu {
+  margin: 0 0 8px 14px;
+  border-left: 1px solid #3a2f22;
+  padding-left: 8px;
+}
+.menu-item.hijo {
+  font-size: 0.9rem;
+  padding: 7px 10px;
+}
+
+.content {
+  flex: 1;
+  padding: 32px;
+  max-width: 800px;
+}
+.content h2 {
+  margin-top: 0;
+  color: #d4a94a;
+}
+.aviso {
+  color: #a89c88;
+  font-size: 0.8rem;
+}
+
+.tarea {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  margin-bottom: 8px;
+  background: #1d1814;
+  border: 1px solid #3a2f22;
+  border-radius: 8px;
+}
+.tarea input {
+  margin-top: 4px;
+  width: 18px;
+  height: 18px;
+  accent-color: #d4a94a;
+  flex-shrink: 0;
+}
+.tarea input:not(:disabled) {
+  cursor: pointer;
+}
+.tarea-texto {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Cerrada: una sola linea con "..." / Abierta: todas las lineas */
+.desc {
+  margin: 4px 0 0;
+  color: #a89c88;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.desc.abierta {
+  white-space: pre-line;
+  overflow: visible;
+}
+
+.toggle {
+  background: none;
+  border: 1px solid #3a2f22;
+  border-radius: 4px;
+  color: #d4a94a;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.toggle:hover {
+  background: #2a221a;
+}
+.toggle[hidden] {
+  display: none;
+}
+.tarea.hecha strong {
+  text-decoration: line-through;
+  color: #8a7d68;
+}
+
+@media (max-width: 700px) {
+  .layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid #3a2f22;
+  }
+  nav {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .menu-item {
+    gap: 8px;
+  }
+}
+
+/* Botones de cada card (desplegar / editar / eliminar) */
+.botones {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.icono {
+  background: none;
+  border: 1px solid #3a2f22;
+  border-radius: 4px;
+  color: #e8dfd0;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 0.85rem;
+}
+.icono:hover {
+  background: #2a221a;
+}
+.icono.peligro:hover {
+  background: #4a1f1a;
+  border-color: #8a3a30;
+}
+
+/* Formulario agregar / editar */
+.tarea.form {
+  flex-direction: column;
+  gap: 10px;
+}
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #a89c88;
+}
+.form input[type="text"],
+.form textarea {
+  background: #14110f;
+  border: 1px solid #3a2f22;
+  border-radius: 6px;
+  color: #e8dfd0;
+  padding: 8px;
+  font: inherit;
+  width: 100%;
+}
+.form input[type="text"]:focus,
+.form textarea:focus {
+  outline: 2px solid #d4a94a;
+  outline-offset: 1px;
+}
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  background: #2a221a;
+  border: 1px solid #3a2f22;
+  border-radius: 6px;
+  color: #e8dfd0;
+  cursor: pointer;
+  padding: 8px 14px;
+  font: inherit;
+}
+.btn:hover {
+  background: #3a2f22;
+}
+.btn.primario {
+  background: #d4a94a;
+  color: #14110f;
+  border-color: #d4a94a;
+}
+.btn.primario:hover {
+  background: #e3bb62;
+}
+.btn.agregar {
+  width: 100%;
+  border-style: dashed;
+  color: #d4a94a;
+}

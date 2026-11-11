@@ -11,7 +11,6 @@ const total = document.getElementById("total");
 let secciones = [];
 let progreso = {};
 const abiertas = new Set();
-const expandidas = new Set(); // tareas con la descripcion desplegada
 let editando = null; // id de la card en edicion, o "nueva"
 
 // ---------- Carga y guardado ----------
@@ -210,12 +209,82 @@ function formulario(ref, tarea) {
 
 function eliminar(ref, tarea) {
   if (!confirm(`Eliminar "${tarea.titulo}"?`)) return;
-  expandidas.delete(tarea.id);
   cambiar(() => {
     const f = fuenteDe(ref.sec, ref.sub);
     if (f) f.tareas = f.tareas.filter((t) => t.id !== tarea.id);
     delete progreso[tarea.id];
   });
+}
+
+// Modal con la card completa. Usa <dialog>: Esc cierra y el foco queda dentro.
+function abrirModal(ref, id) {
+  const t = fuenteDe(ref.sec, ref.sub)?.tareas.find((x) => x.id === id);
+  if (!t) return;
+
+  const dialog = crear("dialog", "modal");
+  dialog.setAttribute("aria-labelledby", "modal-titulo");
+
+  const cabecera = crear("div", "modal-cabecera");
+  const titulo = crear("h3", "", t.titulo);
+  titulo.id = "modal-titulo";
+  const cerrarX = crear("button", "icono", "✕");
+  cerrarX.type = "button";
+  cerrarX.setAttribute("aria-label", "Cerrar");
+  cabecera.append(titulo, cerrarX);
+
+  const cuerpo = crear("div", "modal-cuerpo");
+  if (t.desc) cuerpo.textContent = t.desc;
+  else cuerpo.append(crear("em", "", "Sin descripcion"));
+
+  const pie = crear("div", "modal-pie");
+
+  const estado = crear("label", "modal-estado");
+  const check = crear("input");
+  check.type = "checkbox";
+  check.checked = !!progreso[t.id];
+  check.disabled = !editable;
+  check.addEventListener("change", () => {
+    const marcado = check.checked;
+    cambiar(() => {
+      if (marcado) progreso[t.id] = true;
+      else delete progreso[t.id];
+    });
+  });
+  estado.append(check, document.createTextNode(" Hecho"));
+  pie.appendChild(estado);
+
+  if (editable) {
+    const editar = crear("button", "btn", "Editar");
+    editar.type = "button";
+    editar.addEventListener("click", () => {
+      dialog.close();
+      editando = t.id;
+      renderContenido();
+    });
+    const borrar = crear("button", "btn peligro", "Eliminar");
+    borrar.type = "button";
+    borrar.addEventListener("click", () => {
+      dialog.close();
+      eliminar(ref, t);
+    });
+    pie.append(editar, borrar);
+  }
+  const cerrar = crear("button", "btn primario", "Cerrar");
+  cerrar.type = "button";
+  pie.appendChild(cerrar);
+
+  dialog.append(cabecera, cuerpo, pie);
+  document.body.appendChild(dialog);
+
+  cerrarX.addEventListener("click", () => dialog.close());
+  cerrar.addEventListener("click", () => dialog.close());
+  // Click en el fondo oscuro cierra
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog.addEventListener("close", () => dialog.remove());
+
+  dialog.showModal();
 }
 
 function tarjeta(ref, t) {
@@ -234,33 +303,20 @@ function tarjeta(ref, t) {
     });
   });
 
-  const texto = crear("div", "tarea-texto");
+  // Click en el texto de la card abre el modal (el boton "Ver" es la via por teclado)
+  const texto = crear("div", "tarea-texto clicable");
   texto.appendChild(crear("strong", "", t.titulo));
-  const abierto = expandidas.has(t.id);
-  const desc = crear("p", "desc" + (abierto ? " abierta" : ""), t.desc || "");
-  if (t.desc) texto.appendChild(desc);
+  if (t.desc) texto.appendChild(crear("p", "desc", t.desc));
+  texto.addEventListener("click", () => abrirModal(ref, t.id));
 
   card.append(input, texto);
 
-  // Boton para desplegar: solo aparece si el texto no entra en una linea
-  const toggle = crear("button", "toggle", abierto ? "▲" : "▼");
-  toggle.type = "button";
-  toggle.hidden = true;
-  const marcar = (abierta) => {
-    toggle.textContent = abierta ? "▲" : "▼";
-    toggle.setAttribute("aria-expanded", String(abierta));
-    toggle.setAttribute("aria-label", abierta ? "Contraer" : "Desplegar");
-  };
-  marcar(abierto);
-  toggle.addEventListener("click", () => {
-    if (expandidas.has(t.id)) expandidas.delete(t.id);
-    else expandidas.add(t.id);
-    desc.classList.toggle("abierta");
-    marcar(expandidas.has(t.id));
-  });
-
   const botones = crear("div", "botones");
-  botones.appendChild(toggle);
+  const ver = crear("button", "btn-ver", "Ver");
+  ver.type = "button";
+  ver.setAttribute("aria-label", `Ver ${t.titulo}`);
+  ver.addEventListener("click", () => abrirModal(ref, t.id));
+  botones.appendChild(ver);
   if (editable) {
     const editar = crear("button", "icono", "✎");
     editar.type = "button";
@@ -279,7 +335,7 @@ function tarjeta(ref, t) {
   }
   card.appendChild(botones);
 
-  return { card, toggle, desc };
+  return card;
 }
 
 function renderContenido() {
@@ -296,12 +352,7 @@ function renderContenido() {
       content.appendChild(formulario(ref, t));
       continue;
     }
-    const { card, toggle, desc } = tarjeta(ref, t);
-    content.appendChild(card);
-    // Ya en el DOM: medimos si hay desborde (o varias lineas) para mostrar el boton
-    if (t.desc) {
-      toggle.hidden = !(expandidas.has(t.id) || t.desc.includes("\n") || desc.scrollWidth > desc.clientWidth);
-    }
+    content.appendChild(tarjeta(ref, t));
   }
 
   if (editable) {

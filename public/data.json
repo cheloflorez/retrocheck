@@ -110,5 +110,10 @@
     "id": "dedicado",
     "titulo": "Dedicado",
     "tareas": []
+  },
+  {
+    "id": "varios",
+    "titulo": "Varios",
+    "tareas": []
   }
 ]

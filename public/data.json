@@ -93,6 +93,11 @@
         "id": "offlevel",
         "titulo": "Offlevel",
         "tareas": []
+      },
+      {
+        "id": "comandos",
+        "titulo": "Comandos",
+        "tareas": []
       }
     ]
   },
